@@ -1,0 +1,26 @@
+const int solenoids[6] = {2, 3, 4, 5, 6, 7};  // Define solenoid pins
+
+void setup() {
+    Serial.begin(9600);  
+    for (int i = 0; i < 6; i++) {
+        pinMode(solenoids[i], OUTPUT);  
+        digitalWrite(solenoids[i], LOW);  
+    }
+}
+
+void loop() {
+    if (Serial.available() > 0) {
+        byte braillePattern = Serial.read();  // Read the input 
+
+        for (int i = 0; i < 6; i++) {
+            // Extract each bit from the braille pattern
+            if (braillePattern & (1 << i)) {
+                digitalWrite(solenoids[i], HIGH);  // Activate solenoid
+            } else {
+                digitalWrite(solenoids[i], LOW);  // Deactivate solenoid
+            }
+        }
+
+        delay(1000);  // Hold the pattern for readability
+    }
+}
